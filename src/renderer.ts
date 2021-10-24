@@ -119,6 +119,10 @@ export class Renderer {
       }
     }
 
+    if (this.config.debug) {
+      page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
+    }
+
     await page.setExtraHTTPHeaders(this.config.reqHeaders);
 
     page.evaluateOnNewDocument('customElements.forcePolyfill = true');
