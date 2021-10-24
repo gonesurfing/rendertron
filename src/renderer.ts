@@ -281,6 +281,10 @@ export class Renderer {
       await page.emulateTimezone(timezoneId);
     }
 
+    if (this.config.debug) {
+      page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
+    }
+
     let response: puppeteer.HTTPResponse | null = null;
 
     try {
