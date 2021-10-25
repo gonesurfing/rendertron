@@ -129,15 +129,16 @@ export class Renderer {
     page.evaluateOnNewDocument('ShadyDOM = {force: true}');
     page.evaluateOnNewDocument('ShadyCSS = {shimcssproperties: true}');
 
-    await page.setRequestInterception(true);
-
-    page.on('request', (interceptedRequest: puppeteer.HTTPRequest) => {
-      if (this.restrictRequest(interceptedRequest.url())) {
-        interceptedRequest.abort();
-      } else {
-        interceptedRequest.continue();
-      }
-    });
+    if (this.config.restrictedUrlPattern) {
+      await page.setRequestInterception(true);
+      page.on('request', (interceptedRequest: puppeteer.HTTPRequest) => {
+        if (this.restrictRequest(interceptedRequest.url())) {
+          interceptedRequest.abort();
+        } else {
+          interceptedRequest.continue();
+        }
+      });
+    }
 
     let response: puppeteer.HTTPResponse | null = null;
     // Capture main frame response. This is used in the case that rendering
@@ -267,15 +268,16 @@ export class Renderer {
       page.setUserAgent(MOBILE_USERAGENT);
     }
 
-    await page.setRequestInterception(true);
-
-    page.addListener('request', (interceptedRequest: puppeteer.HTTPRequest) => {
-      if (this.restrictRequest(interceptedRequest.url())) {
-        interceptedRequest.abort();
-      } else {
-        interceptedRequest.continue();
-      }
-    });
+    if (this.config.restrictedUrlPattern) {
+      await page.setRequestInterception(true);
+      page.on('request', (interceptedRequest: puppeteer.HTTPRequest) => {
+        if (this.restrictRequest(interceptedRequest.url())) {
+          interceptedRequest.abort();
+        } else {
+          interceptedRequest.continue();
+        }
+      });
+    }
 
     if (timezoneId) {
       await page.emulateTimezone(timezoneId);
