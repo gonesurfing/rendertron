@@ -1,6 +1,7 @@
 runtime: nodejs12
-instance_class: F4_1G
-automatic_scaling:
-  min_instances: 1
+instance_class: B4_1G
+basic_scaling:
+  max_instances: 2
+  idle_timeout: 5m
 env_variables:
   DISABLE_LEGACY_METADATA_SERVER_ENDPOINTS: "true"
